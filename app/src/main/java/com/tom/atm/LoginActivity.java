@@ -1,6 +1,8 @@
 package com.tom.atm;
 
 import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -16,6 +18,9 @@ public class LoginActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        EditText userid = (EditText) findViewById(R.id.userid);
+        userid.setText(getSharedPreferences("atm", MODE_PRIVATE)
+                .getString("PREF_USERID", ""));
     }
 
     public void login(View v){
@@ -24,8 +29,17 @@ public class LoginActivity extends ActionBarActivity {
         String uid = edUserid.getText().toString();
         String pw = edPasswd.getText().toString();
         if (uid.equals("jack") && pw.equals("1234")){ //登入成功
-            Toast.makeText(this, "登入成功", Toast.LENGTH_LONG).show();
-            finish();
+            SharedPreferences setting = getSharedPreferences("atm", MODE_PRIVATE);
+            setting.edit().putString("PREF_USERID", uid).commit();
+//            Toast.makeText(this, "登入成功", Toast.LENGTH_LONG).show();
+            new AlertDialog.Builder(this)
+                    .setMessage("登入成功")
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            finish();
+                        }
+                    }).show();
         }else{  //登入失敗
             new AlertDialog.Builder(this)
                     .setTitle("Atm")
