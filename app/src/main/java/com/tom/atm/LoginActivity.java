@@ -8,16 +8,34 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Toast;
 
 
 public class LoginActivity extends ActionBarActivity {
-
+    boolean rememberUserid = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        CheckBox cbUserid = (CheckBox) findViewById(R.id.cb_remember_userid);
+        cbUserid.setChecked(getSharedPreferences("atm", MODE_PRIVATE)
+                .getBoolean("PREF_REMEMBER_USERID", false));
+        cbUserid.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                getSharedPreferences("atm", MODE_PRIVATE).edit()
+                        .putBoolean("PREF_REMEMBER_USERID", isChecked)
+                        .commit();
+                rememberUserid = isChecked;
+                if (!rememberUserid){
+                    getSharedPreferences("atm", MODE_PRIVATE).edit().putString("PREF_USERID", "").commit();
+                }
+            }
+        });
+
         EditText userid = (EditText) findViewById(R.id.userid);
         userid.setText(getSharedPreferences("atm", MODE_PRIVATE)
                 .getString("PREF_USERID", ""));
@@ -29,8 +47,10 @@ public class LoginActivity extends ActionBarActivity {
         String uid = edUserid.getText().toString();
         String pw = edPasswd.getText().toString();
         if (uid.equals("jack") && pw.equals("1234")){ //登入成功
-            SharedPreferences setting = getSharedPreferences("atm", MODE_PRIVATE);
-            setting.edit().putString("PREF_USERID", uid).commit();
+            if (rememberUserid) {
+                SharedPreferences setting = getSharedPreferences("atm", MODE_PRIVATE);
+                setting.edit().putString("PREF_USERID", uid).commit();
+            }
 //            Toast.makeText(this, "登入成功", Toast.LENGTH_LONG).show();
             new AlertDialog.Builder(this)
                     .setMessage("登入成功")
