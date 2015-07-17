@@ -3,8 +3,10 @@ package com.tom.atm;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,8 +16,17 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+
+
 public class LoginActivity extends ActionBarActivity {
     boolean rememberUserid = false;
+    private String uid;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,32 +52,62 @@ public class LoginActivity extends ActionBarActivity {
                 .getString("PREF_USERID", ""));
     }
 
+    class LoginTask extends AsyncTask<String, Void, Integer>{
+
+        @Override
+        protected Integer doInBackground(String... params) {
+            int data = 0;
+            try {
+                URL url = new URL(params[0]);
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                InputStream is = conn.getInputStream();
+                data = is.read();
+                Log.d("DATA", data+"");
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return data;
+        }
+
+        @Override
+        protected void onPostExecute(Integer integer) {
+            super.onPostExecute(integer);
+            Log.d("RET", integer+"");
+            if (integer == 49){
+                if (rememberUserid) {
+                    SharedPreferences setting = getSharedPreferences("atm", MODE_PRIVATE);
+                    setting.edit().putString("PREF_USERID", uid).commit();
+                }
+//            Toast.makeText(this, "登入成功", Toast.LENGTH_LONG).show();
+                new AlertDialog.Builder(LoginActivity.this)
+                        .setMessage("登入成功")
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                finish();
+                            }
+                        }).show();
+            }else{
+                new AlertDialog.Builder(LoginActivity.this)
+                        .setTitle("Atm")
+                        .setMessage("登入失敗")
+                        .setPositiveButton("OK", null)
+                        .show();
+            }
+        }
+    }
+
     public void login(View v){
         EditText edUserid = (EditText) findViewById(R.id.userid);
         EditText edPasswd = (EditText) findViewById(R.id.passwd);
-        String uid = edUserid.getText().toString();
+        uid = edUserid.getText().toString();
         String pw = edPasswd.getText().toString();
-        if (uid.equals("jack") && pw.equals("1234")){ //登入成功
-            if (rememberUserid) {
-                SharedPreferences setting = getSharedPreferences("atm", MODE_PRIVATE);
-                setting.edit().putString("PREF_USERID", uid).commit();
-            }
-//            Toast.makeText(this, "登入成功", Toast.LENGTH_LONG).show();
-            new AlertDialog.Builder(this)
-                    .setMessage("登入成功")
-                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            finish();
-                        }
-                    }).show();
-        }else{  //登入失敗
-            new AlertDialog.Builder(this)
-                    .setTitle("Atm")
-                    .setMessage("登入失敗")
-                    .setPositiveButton("OK", null)
-                    .show();
-        }
+        //網路連線
+        String s = "http://j.snpy.org/atm/login?userid="+ uid +"&pw="+pw;
+        Log.d("URL", s);
+        new LoginTask().execute(s);
     }
 
     public void cancel(View v){
