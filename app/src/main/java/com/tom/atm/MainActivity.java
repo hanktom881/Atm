@@ -5,14 +5,20 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 
 public class MainActivity extends ActionBarActivity {
     boolean logon = false;
     String[] funcNames = {"餘額查詢", "記錄查詢", "變更密碼", "投資項目", "轉帳"};
+    int[] funcImage = {R.drawable.f1, R.drawable.f2, R.drawable.f3, R.drawable.f4, R.drawable.f5};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,11 +31,42 @@ public class MainActivity extends ActionBarActivity {
 //        ListView list = (ListView) findViewById(R.id.list);
         GridView grid = (GridView) findViewById(R.id.grid);
 //        String[] data = {"AA", "BB", "CC"};
-        ArrayAdapter<String> adapter =
-                new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, funcNames);
+//        ArrayAdapter<String> adapter =
+//                new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, funcNames);
 //                new ArrayAdapter<String>(this, R.layout.row_test, data);
-
+        IconAdapter adapter = new IconAdapter();
         grid.setAdapter(adapter);
+    }
+
+    class IconAdapter extends BaseAdapter{
+
+        @Override
+        public int getCount() {
+            return funcNames.length;
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return funcNames[position];
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            if (convertView == null){
+                View v = getLayoutInflater().inflate(R.layout.icon_row, null);
+                ImageView iv = (ImageView) v.findViewById(R.id.icon_image);
+                TextView tv = (TextView) v.findViewById(R.id.icon_text);
+                tv.setText(funcNames[position]);
+                iv.setImageResource(funcImage[position]);
+                convertView = v;
+            }
+            return convertView;
+        }
     }
 
     @Override
