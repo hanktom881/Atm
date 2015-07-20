@@ -4,4 +4,9 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_login">LoginActivity</string>
+    <array name="fruits">
+        <item>AA</item>
+        <item>BB</item>
+        <item>CC</item>
+    </array>
 </resources>
