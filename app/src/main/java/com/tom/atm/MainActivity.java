@@ -6,11 +6,14 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
+import android.widget.GridView;
 import android.widget.ListView;
 
 
 public class MainActivity extends ActionBarActivity {
     boolean logon = false;
+    String[] funcNames = {"餘額查詢", "記錄查詢", "變更密碼", "投資項目", "轉帳"};
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -19,11 +22,14 @@ public class MainActivity extends ActionBarActivity {
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
         }
-        ListView list = (ListView) findViewById(R.id.list);
-        String[] data = {"AA", "BB", "CC"};
+//        ListView list = (ListView) findViewById(R.id.list);
+        GridView grid = (GridView) findViewById(R.id.grid);
+//        String[] data = {"AA", "BB", "CC"};
         ArrayAdapter<String> adapter =
-                new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, data);
-        list.setAdapter(adapter);
+                new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, funcNames);
+//                new ArrayAdapter<String>(this, R.layout.row_test, data);
+
+        grid.setAdapter(adapter);
     }
 
     @Override
