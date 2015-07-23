@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/icon_image"
         android:layout_gravity="center_horizontal"
-        android:src="@drawable/f1" />
+        android:src="@drawable/func_balance" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -18,4 +18,5 @@
         android:text="Large Text"
         android:id="@+id/icon_text"
         android:layout_gravity="center_horizontal" />
+
 </LinearLayout>

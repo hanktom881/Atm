@@ -7,18 +7,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity implements AdapterView.OnItemClickListener {
     boolean logon = false;
     String[] funcNames = {"餘額查詢", "記錄查詢", "變更密碼", "投資項目", "轉帳"};
-    int[] funcImage = {R.drawable.f1, R.drawable.f2, R.drawable.f3, R.drawable.f4, R.drawable.f5};
+    int[] funcImage = {R.drawable.func_balance, R.drawable.func_history, R.drawable.f3, R.drawable.f4, R.drawable.f5};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +35,26 @@ public class MainActivity extends ActionBarActivity {
 //                new ArrayAdapter<String>(this, R.layout.row_test, data);
         IconAdapter adapter = new IconAdapter();
         grid.setAdapter(adapter);
+        grid.setOnItemClickListener(this);
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        switch ((int)id){
+            case R.drawable.func_balance:
+                Intent intent = new Intent(this, BalanceActivity.class);
+                startActivity(intent);
+                break;
+            case R.drawable.func_history:
+                
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+            case 4:
+                break;
+        }
     }
 
     class IconAdapter extends BaseAdapter{
@@ -52,7 +71,7 @@ public class MainActivity extends ActionBarActivity {
 
         @Override
         public long getItemId(int position) {
-            return position;
+            return funcImage[position];
         }
 
         @Override

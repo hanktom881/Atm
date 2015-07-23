@@ -29,7 +29,8 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/passwd" />
+        android:id="@+id/passwd"
+        android:text="1234" />
 
     <CheckBox
         android:layout_width="wrap_content"

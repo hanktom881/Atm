@@ -26,6 +26,7 @@ import java.net.URL;
 public class LoginActivity extends ActionBarActivity {
     boolean rememberUserid = false;
     private String uid;
+    private String password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +77,8 @@ public class LoginActivity extends ActionBarActivity {
             super.onPostExecute(integer);
             Log.d("RET", integer+"");
             if (integer == 49){
+                Member.userid = uid;
+                Member.password = password;
                 if (rememberUserid) {
                     SharedPreferences setting = getSharedPreferences("atm", MODE_PRIVATE);
                     setting.edit().putString("PREF_USERID", uid).commit();
@@ -103,9 +106,9 @@ public class LoginActivity extends ActionBarActivity {
         EditText edUserid = (EditText) findViewById(R.id.userid);
         EditText edPasswd = (EditText) findViewById(R.id.passwd);
         uid = edUserid.getText().toString();
-        String pw = edPasswd.getText().toString();
+        password = edPasswd.getText().toString();
         //網路連線
-        String s = "http://j.snpy.org/atm/login?userid="+ uid +"&pw="+pw;
+        String s = "http://j.snpy.org/atm/login?userid="+ uid +"&pw="+ password;
         Log.d("URL", s);
         new LoginTask().execute(s);
     }

@@ -9,4 +9,5 @@
         <item>BB</item>
         <item>CC</item>
     </array>
+    <string name="title_activity_balance">BalanceActivity</string>
 </resources>
