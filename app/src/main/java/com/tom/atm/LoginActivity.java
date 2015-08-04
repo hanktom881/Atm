@@ -2,6 +2,7 @@ package com.tom.atm;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
@@ -89,6 +90,9 @@ public class LoginActivity extends ActionBarActivity {
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
+                                Intent data = new Intent();
+                                data.putExtra("LOGIN", true);
+                                setResult(RESULT_OK, data);
                                 finish();
                             }
                         }).show();

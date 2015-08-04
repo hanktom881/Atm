@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 public class MainActivity extends ActionBarActivity implements AdapterView.OnItemClickListener {
     boolean logon = false;
+    public static final int REQUEST_CODE_LOGIN = 5;
     String[] funcNames = {"餘額查詢", "記錄查詢", "變更密碼", "投資項目", "轉帳"};
     int[] funcImage = {R.drawable.func_balance, R.drawable.func_history, R.drawable.f3, R.drawable.f4, R.drawable.f5};
 
@@ -25,7 +26,8 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
         setContentView(R.layout.activity_main);
         if (!logon){ //如果未登入, 則開啟登入Activity
             Intent intent = new Intent(this, LoginActivity.class);
-            startActivity(intent);
+//            startActivity(intent);
+            startActivityForResult(intent, REQUEST_CODE_LOGIN);
         }
 //        ListView list = (ListView) findViewById(R.id.list);
         GridView grid = (GridView) findViewById(R.id.grid);
@@ -36,6 +38,20 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
         IconAdapter adapter = new IconAdapter();
         grid.setAdapter(adapter);
         grid.setOnItemClickListener(this);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode==RESULT_OK){
+            if (requestCode == REQUEST_CODE_LOGIN) {
+                boolean login = data.getBooleanExtra("LOGIN", false);
+                if (!login) {
+                    finish();
+                }
+            }
+        }else{
+            finish();
+        }
     }
 
     @Override
@@ -78,6 +94,7 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
         public View getView(int position, View convertView, ViewGroup parent) {
             if (convertView == null){
                 View v = getLayoutInflater().inflate(R.layout.icon_row, null);
+//                v.setLayoutParams(new GridView.LayoutParams(GridView.AUTO_FIT, 400));
                 ImageView iv = (ImageView) v.findViewById(R.id.icon_image);
                 TextView tv = (TextView) v.findViewById(R.id.icon_text);
                 tv.setText(funcNames[position]);
