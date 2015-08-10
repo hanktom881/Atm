@@ -10,6 +10,9 @@ import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,6 +21,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -67,6 +71,12 @@ public class HistoryActivity extends Activity {
             Log.d("JSON", s);
             try {
                 JSONArray array = new JSONArray(s);
+                /*Gson gson = new Gson();
+                ArrayList<History> hists = gson.fromJson(s, new TypeToken<List<History>>(){}.getType());
+                Log.d("HIST", hists.size()+"");
+                for (History h : hists){
+                    Log.d("HIST",h.getDate()+"/"+h.getAmount()+"/"+h.getUserid());
+                }*/
                 List<Map<String, String>> data = new ArrayList<Map<String, String>>();
                 for (int i=0; i<array.length(); i++){
                     JSONObject obj = array.getJSONObject(i);
