@@ -38,6 +38,26 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
         IconAdapter adapter = new IconAdapter();
         grid.setAdapter(adapter);
         grid.setOnItemClickListener(this);
+
+        /*NetworkThread network = new NetworkThread();
+        network.start();
+
+        //
+
+        new Thread(){
+            @Override
+            public void run() {
+
+            }
+        }.start();*/
+    }
+
+    class NetworkThread extends Thread{
+        @Override
+        public void run() {
+
+
+        }
     }
 
     @Override
@@ -62,7 +82,8 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
                 startActivity(intent);
                 break;
             case R.drawable.func_history:
-                
+                Intent history = new Intent(this, HistoryActivity.class);
+                startActivity(history);
                 break;
             case 2:
                 break;

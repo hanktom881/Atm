@@ -11,4 +11,5 @@
     </array>
     <string name="title_activity_balance">BalanceActivity</string>
     <string name="title_activity_camera">CameraActivity</string>
+    <string name="title_activity_history">HistoryActivity</string>
 </resources>
