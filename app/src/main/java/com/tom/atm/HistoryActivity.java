@@ -31,15 +31,49 @@ import java.util.List;
 import java.util.Map;
 
 
-public class HistoryActivity extends Activity {
+public class HistoryActivity extends Activity{
     ListView list;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
         list = (ListView) findViewById(R.id.list);
-        String url = "http://j.snpy.org/atm/h?userid="+Member.userid+"&pw="+Member.password;
+        String url = "http://j.snpy.org/atm/h?userid=" + Member.userid + "&pw=" + Member.password;
         new HistoryTask().execute(url);
+//        runByThread(s);
+    }
+
+    private void runByThread(final String s) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                StringBuilder sb = new StringBuilder();
+                try {
+                    URL url = new URL(s);
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    InputStream is = conn.getInputStream();
+                    InputStreamReader isr = new InputStreamReader(is);
+                    BufferedReader in = new BufferedReader(isr);
+                    String line = in.readLine();
+                    while(line!=null){
+                        sb.append(line);
+                        line = in.readLine();
+                    }
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                Log.d("HISTORY", sb.toString());
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                    }
+                });
+            }
+        }).start();
     }
 
     class HistoryTask extends AsyncTask<String, Void, String>{
